@@ -15,12 +15,11 @@ class BookController extends Controller
      */
     public function index()
     {
-        $data = Book::select("newbooks.name as Name" , "count" , "authors.name as Author_Name" , "janres.name as Janre")
+        $data = Book::select( "newbooks.id as Book_Id" , "janres.id as janre_id" , 'authors.id as author_id'  ,"newbooks.name as Name" , "authors.name as Author_Name" , "janres.name as Janre", "count" )
         ->join('authors' ,'authors.id' , 'newbooks.author_id' )
         ->join('janres' , 'janres.id' , 'newbooks.janre_id')
         ->get();
-        return $data;
-        return "fwofkwep";
+        return $this->SuccessResponce($data);
     }
  
     /**
@@ -39,7 +38,7 @@ class BookController extends Controller
         ]);
         if($validator->fails()){
             
-            return $this->ErrorResponce($validator->errors()->first());
+            return $this->ErrorResponce($validator->errors()->first() , 419);
         }
         Book::create([
             "name"=>$request->name,
@@ -59,7 +58,8 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        //
+        return $this->SuccessResponce(Book::select('id' , "janre_id","author_id",'name' , 'created_at')->where('id' , $book->id)->get());
+        
     }
 
     /**

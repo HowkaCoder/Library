@@ -11,15 +11,15 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
-    public function SuccessResponce($message = "Success" , $code = 200 , $data = null){
+    public function SuccessResponce( $data = ['message'=>"Success"]){
         
-        return response($message , $code);
+        return response($data , 200 );
 
     }
 
-    public function ErrorResponce($message = "Error" , $code = 419 , $data = null){
+    public function ErrorResponce( $data = "Error" , $code){
 
-        return response($message , $code);
+        return response(["message"=> $data] , $code);
     
     }
 }

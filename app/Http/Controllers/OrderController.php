@@ -16,12 +16,13 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $data = Order::select("transaktions.id as ID" , 'books.name as Book' , 'students.name as Student' , 'count' , 'transaktions.created_at as created_at')
-        ->join('books' , 'books.id' , 'transaktions.book_id')
-        ->join('students' , 'students.id' , 'transaktions.student_id')
-        ->where('transaktions.status' , "created")
-        ->get();
-        return $data;
+        // $data = Order::select("transaktions.id as ID" , 'books.name as Book' , 'students.name as Student' , 'count' , 'transaktions.created_at as created_at')
+        // ->join('books' , 'books.id' , 'transaktions.book_id')
+        // ->join('students' , 'students.id' , 'transaktions.student_id')
+        // ->where('transaktions.status' , "created")
+        // ->get();
+        // return $this->SuccessResponce($data);
+        return $this->SuccessResponce(Order::where('status' , 'created')->get());
     }
 
     /**
@@ -38,22 +39,22 @@ class OrderController extends Controller
             "student_id"=>"required|exists:App\Models\Student,id"
         ]);
         if($validator->fails()){
-            return $this->ErrorResponce($validator->errors()->first());
+            return $this->ErrorResponce($validator->errors()->first() , 419);
         }
         $book = Book::where('id',$request->book_id)->get();
         $count = $request->count;
         foreach($book as $value){
             $zero = $value->count - $count;
             if($zero < 0 ) {
-                $this->rsp['message'] = "Не осталось книг";
-                $this->rsp['code'] = 319 ;
-                return $this->rsp;
-            }else{     
+            return $this->ErrorResponce("Не осталось книг" , 319);
+            }else{   
+
             Order::create([
             "count"=>$request->count,
             "book_id"=>$request->book_id,
             "student_id"=>$request->student_id,
             "status"=>"created"
+            
         ]);
             Book::where('id' , $value->id)->update([
                 "count"=>$zero
@@ -73,7 +74,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        return $this->SuccessResponce(Order::where('id' , $order->id)->get());
     }
 
     /**
@@ -110,7 +111,7 @@ class OrderController extends Controller
                 "count"=>$polo->count + $count->count
         
             ]);
-            return $polo->count + $count->count;
+            // return $polo->count + $count->count;
         
             return $this->SuccessResponce();
             }

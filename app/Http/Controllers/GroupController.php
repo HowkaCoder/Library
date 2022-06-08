@@ -20,8 +20,7 @@ class GroupController extends Controller
        ->join('facultets', 'facultets.id', 'groups.facultet_id')
        ->get();
        
-       
-        return $groups;
+        return $this->SuccessResponce($groups);
     }
 
     /**
@@ -37,7 +36,7 @@ class GroupController extends Controller
             "facultet_id"=>"required|exists:App\Models\Facultet,id"
         ]);
         if($validator->fails()){
-            return $this->ErrorResponce($validator->errors()->first());
+            return $this->ErrorResponce($validator->errors()->first() , 419);
         }
         Group::create([
             "name"=>$request->name,
@@ -55,7 +54,8 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
-        //
+        $id = $group->id;
+        return $this->SuccessResponce(Group::select('id' , 'facultet_id' , 'name' , 'created_at')->where('id' , $id)->get());
     }
 
     /**

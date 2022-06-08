@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthorController extends Controller
 {
-    
+     
     /**
      * Display a listing of the resource.
      *
@@ -31,7 +31,7 @@ class AuthorController extends Controller
             "name"=>"required"
         ]);
         if($validator->fails()){
-            return $this->ErrorResponce($validator->errors()->first());
+            return $this->ErrorResponce($validator->errors()->first() , 419);
         }
         Author::create([
             "name"=>$request->name
@@ -48,7 +48,7 @@ class AuthorController extends Controller
      */
     public function show(Author $author)
     {
-        //
+        return $this->SuccessResponce(Author::select('id' , 'name' , 'created_at')->where('id' , $author->id)->get());
     }
 
     /**

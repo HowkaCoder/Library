@@ -16,11 +16,11 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $data = Student::select("students.name as Name " , "password" , "groups.name as Group" , "facultets.name as Facultet")
+        $data = Student::select( "students.id as Student_Id" , "groups.id as Group_Id","facultets.id as faculty_Id" ,  "students.name as Name " , "groups.name as Group" , "facultets.name as Facultet")
         ->join('groups' , 'groups.id' , 'students.group_id')
         ->join('facultets' , 'facultets.id' , 'groups.facultet_id')
         ->get();
-        return $data;
+        return $this->SuccessResponce($data);
     }
 
     /**
@@ -37,7 +37,7 @@ class StudentController extends Controller
             "group_id"=>"required|exists:App\Models\Group,id"
         ]);
         if($validator->fails()){
-            return $this->ErrorResponce($validator->errors()->first());
+            return $this->ErrorResponce($validator->errors()->first() , 419);
         }
         Student::create([
             "name"=>$request->name,
@@ -55,7 +55,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        //
+        return $this->SuccessResponce(Student::select('id' , 'group_id','name','created_at'  )->where('id' , $student->id)->get());
     }
 
     /**

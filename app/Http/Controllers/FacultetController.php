@@ -15,8 +15,7 @@ class FacultetController extends Controller
      */
     public function index()
     {
-        $data = Facultet::all();
-        return $data;
+        return $this->SuccessResponce(Facultet::all());
     }
 
     /**
@@ -31,7 +30,7 @@ class FacultetController extends Controller
             "name"=>"required"
         ]);
         if($validator->fails()){
-            return $this->ErrorResponce($validator->errors()->first());
+            return $this->ErrorResponce($validator->errors()->first() , 419);
         }
         Facultet::create([
             "name"=>$request->name
@@ -47,7 +46,8 @@ class FacultetController extends Controller
      */
     public function show(Facultet $facultet)
     {
-        //
+        $id = $facultet->id;
+        return $this->SuccessResponce(Facultet::select('id' , 'name' , 'created_at')->where('id' , $id)->get());
     }
 
     /**

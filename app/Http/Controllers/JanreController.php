@@ -15,7 +15,7 @@ class JanreController extends Controller
      */
     public function index()
     {
-        return Janre::all();
+        return $this->SuccessResponce(Janre::all());
     }
 
     /**
@@ -30,7 +30,7 @@ class JanreController extends Controller
             "name"=>"required"
         ]);
         if($validator->fails()){
-            return $this->ErrorResponce($validator->errors()->first());
+            return $this->ErrorResponce($validator->errors()->first() , 419);
         }
         Janre::create([
             "name"=>$request->name
@@ -47,7 +47,8 @@ class JanreController extends Controller
      */
     public function show(Janre $janre)
     {
-        //
+        return $this->SuccessResponce(Janre::select('id' , 'name' , 'created_at')->where('id' , $janre->id)->get());
+        
     }
 
     /**
