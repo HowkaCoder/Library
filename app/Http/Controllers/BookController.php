@@ -58,7 +58,7 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        return $this->SuccessResponce(Book::select('id' , "janre_id","author_id",'name' , 'created_at')->where('id' , $book->id)->get());
+        return $this->SuccessResponce($book);
         
     }
 
@@ -82,7 +82,7 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        Book::where('id' , $book->id)->delete();
+        $book->delete();
         return $this->SuccessResponce();
     }
 }

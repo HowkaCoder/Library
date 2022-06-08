@@ -55,7 +55,14 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        return $this->SuccessResponce(Student::select('id' , 'group_id','name','created_at'  )->where('id' , $student->id)->get());
+        // return $this->SuccessResponce($student);
+        $data = Student::select('students.id as student_id' , 'newbooks.id as book_id' , 'groups.id as group_id','students.name as student_name' , 'groups.name as group_name' , 'newbooks.name as book_name')
+        ->join('transaktions' , 'transaktions.student_id' , 'students.id')
+        ->join('groups' , 'groups.id' , 'students.group_id')
+        ->join('newbooks' , 'newbooks.id' , 'transaktions.book_id')
+        ->where('students.id' , $student->id)
+        ->first();
+        return $data;
     }
 
     /**
@@ -78,9 +85,7 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        
-        $id = $student->id;
-        Student::where('id' , $id)->delete();
+        $student->delete();
         return $this->SuccessResponce();
     }
 }

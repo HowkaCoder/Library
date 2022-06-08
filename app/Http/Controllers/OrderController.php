@@ -74,7 +74,8 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        return $this->SuccessResponce(Order::where('id' , $order->id)->get());
+        return $this->SuccessResponce($order);
+        
     }
 
     /**

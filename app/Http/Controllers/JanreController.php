@@ -47,7 +47,7 @@ class JanreController extends Controller
      */
     public function show(Janre $janre)
     {
-        return $this->SuccessResponce(Janre::select('id' , 'name' , 'created_at')->where('id' , $janre->id)->get());
+        return $this->SuccessResponce($janre);
         
     }
 
@@ -72,7 +72,7 @@ class JanreController extends Controller
     public function destroy(Janre $janre)
     {
         
-        Janre::where('id' , $janre->id)->delete();
+        $janre->delete();
         return $this->SuccessResponce();
     }
 }

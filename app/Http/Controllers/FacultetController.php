@@ -46,8 +46,7 @@ class FacultetController extends Controller
      */
     public function show(Facultet $facultet)
     {
-        $id = $facultet->id;
-        return $this->SuccessResponce(Facultet::select('id' , 'name' , 'created_at')->where('id' , $id)->get());
+        return $this->SuccessResponce($facultet);
     }
 
     /**
@@ -70,8 +69,7 @@ class FacultetController extends Controller
      */
     public function destroy(Facultet $facultet)
     {
-        $id = $facultet->id;
-        Facultet::where('id' , $id)->delete();
+        $facultet->delete();
         return $this->SuccessResponce();
     }
 }

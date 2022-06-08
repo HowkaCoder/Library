@@ -54,8 +54,7 @@ class GroupController extends Controller
      */
     public function show(Group $group)
     {
-        $id = $group->id;
-        return $this->SuccessResponce(Group::select('id' , 'facultet_id' , 'name' , 'created_at')->where('id' , $id)->get());
+        return $this->SuccessResponce($group);
     }
 
     /**
@@ -78,8 +77,7 @@ class GroupController extends Controller
      */
     public function destroy(Group $group)
     {
-        $id = $group->id;
-        Group::where('id' , $id)->delete();
+        $group->delete();
         return $this->SuccessResponce();
     }
 }

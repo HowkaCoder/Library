@@ -48,7 +48,12 @@ class AuthorController extends Controller
      */
     public function show(Author $author)
     {
-        return $this->SuccessResponce(Author::select('id' , 'name' , 'created_at')->where('id' , $author->id)->get());
+        $data = Author::select('authors.id as author_id' , 'newbooks.id as book_id' , 'authors.name as Name'  , 'newbooks.name as Book_Name')
+        ->join('newbooks' , 'newbooks.author_id' , 'authors.id')
+        ->where('authors.id' , $author->id)
+        ->get();
+        return $this->SuccessResponce($data);
+    
     }
 
     /**
@@ -71,7 +76,7 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
-        Author::where('id' , $author->id)->delete();
+        $author->delete();
         return $this->SuccessResponce();
     }
 }
